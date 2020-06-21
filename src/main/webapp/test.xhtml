@@ -10,9 +10,31 @@
     </h:head>
     <h:body>
 
-        <h1>#{testView.testString}</h1>
         <h:form id="frmTest">
-            
+          <p:dataTable value="#{testView.entries}" var="entry" draggableRows="true" >
+
+            <p:column headerText="Type">
+              <h:outputText value="#{entry.name}" />
+            </p:column>
+
+            <p:column headerText="Value">
+              <p:inputText rendered="#{entry.isString()}" value="#{entry.value}">
+                <p:ajax partialSubmit="true" update="" event="keydown" />
+                <p:ajax partialSubmit="true" update="" event="keyup" />
+              </p:inputText>
+              
+              <p:selectBooleanCheckbox rendered="#{entry.isBoolean()}" value="#{entry.value}">
+                <p:ajax partialSubmit="true" update="" event="change" />
+              </p:selectBooleanCheckbox>
+              
+              <p:datePicker rendered="#{entry.isDate()}" value="#{entry.value}">
+                <p:ajax partialSubmit="true" update="" event="change" />
+              </p:datePicker>
+            </p:column>
+
+            <p:ajax partialSubmit="true" event="rowReorder" update="" />
+          </p:dataTable>
+
         </h:form>
 
     </h:body>
