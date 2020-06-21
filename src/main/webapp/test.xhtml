@@ -10,9 +10,16 @@
     </h:head>
     <h:body>
 
-        <h1>#{testView.testString}</h1>
         <h:form id="frmTest">
-            
+          <h1>Disabled: #{testView.disabled}</h1>
+          <p:commandButton
+            action="#{testView.action}" disabled="#{testView.disabled}"
+            partialSubmit="true" update="@form"
+            value="Click to toggle disabled state" />
+          <p:commandButton
+            action="#{testView.enableAction}"
+            partialSubmit="true" update="@form"
+            value="Click to set enable state" />
         </h:form>
 
     </h:body>
