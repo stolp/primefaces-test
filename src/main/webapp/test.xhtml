@@ -12,7 +12,11 @@
 
         <h1>#{testView.testString}</h1>
 
-        <h1>#{testViewCdi.testString}</h1>
+        <h2>Select date and time, then hit clear. Select another date.</h2>
 
+        <p:datePicker
+          value="#{testView.testDate}"
+          showTime="true" showOnFocus="true" showButtonBar="true">
+        </p:datePicker>
     </h:body>
 </html>

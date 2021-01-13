@@ -31,9 +31,6 @@
     <listener>
         <listener-class>org.apache.webbeans.servlet.WebBeansConfigurationListener</listener-class>
     </listener>
-    <listener>
-        <listener-class>${jsf-listener}</listener-class>
-    </listener>
 
 
     <servlet>
