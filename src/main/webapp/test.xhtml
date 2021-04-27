@@ -3,18 +3,64 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:h="http://java.sun.com/jsf/html">
 
-    <h:head>
-        <title>PrimeFaces Test</title>
-        <h:outputScript name="test.js" />
-    </h:head>
-    <h:body>
+  <h:head>
+      <title>PrimeFaces Test</title>
+      <h:outputScript name="test.js" />
+  </h:head>
+  <h:body>
 
-        <h1>#{testView.string}</h1>
-        <h:form id="frmTest">
-            
-        </h:form>
+    <pe:blockUI rendered="false" />
 
-    </h:body>
+    <h1>#{testView.string}</h1>
+    <h:form id="frmTest">
+          
+      <ui:fragment rendered="#{not empty testView.string}">
+    
+        <p:tabView prependId="false" dynamic="false" cache="false">
+  
+          <p:ajax event="tabChange" />
+        
+          <p:tab id="parametersTab">
+            <f:facet name="title">
+              <h:outputText value="Parameters" />
+            </f:facet>
+          </p:tab>
+  
+          <p:tab id="scriptTab">
+            <f:facet name="title">
+              <h:outputText value="Script" />
+            </f:facet>
+         
+            <pe:monacoEditor id="scriptEditor"
+              value="#{testView.string}"
+              locale="en" autoResize="false" width="100%" 
+              editorOptions="#{testView.scriptEditorOptions}"
+              widgetVar="scriptWidget">
+              <p:ajax event="change"
+                delay="#{klarosApplicationContext.uiData.inputTextDelay}" partialSubmit="true" />
+            </pe:monacoEditor>
+  
+          </p:tab>
+    
+          <p:tab id="templateTab">
+            <f:facet name="title">
+              <h:outputText value="Template" />
+            </f:facet>
+  
+            <pe:monacoEditor id="templateEditor"
+              value="#{testView.string}"
+              editorOptions="#{testView.templateEditorOptions}"
+              locale="en" autoResize="false" width="100%"
+              widgetVar="templateWidget">
+              <p:ajax event="change" delay="#{klarosApplicationContext.uiData.inputTextDelay}"
+                partialSubmit="true" />
+            </pe:monacoEditor>
+          </p:tab>
+        </p:tabView>
+      </ui:fragment>
+    </h:form>
+  </h:body>
 </html>
