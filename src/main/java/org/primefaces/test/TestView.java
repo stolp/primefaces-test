@@ -1,14 +1,28 @@
+/*
+ * Copyright 2024 verit Informationssysteme GmbH, Europaallee 10,
+ * 67657 Kaiserslautern, Germany, http://www.verit.de.
+ *
+ * All rights reserved.
+ *
+ * This product or document is protected by copyright and distributed
+ * under licenses restricting its use, copying, distribution, and
+ * decompilation. No part of this product or documentation may be
+ * reproduced in any form by any means without prior written authorization
+ * of verit Informationssysteme GmbH and its licensors, if any.
+ */
 package org.primefaces.test;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.math.BigDecimal;
-import jakarta.annotation.PostConstruct;
-import jakarta.faces.view.ViewScoped;
-import jakarta.inject.Named;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
+
+import org.primefaces.event.FileUploadEvent;
 
 import lombok.Data;
 
@@ -17,21 +31,51 @@ import lombok.Data;
 @ViewScoped
 public class TestView implements Serializable {
 
-    private String string;
-    private Integer integer;
-    private BigDecimal decimal;
-    private LocalDateTime localDateTime;
-    private List<TestObject> list;
+    private List<UploadedFile> uploadedFiles;
 
     @PostConstruct
     public void init() {
-        string = "Welcome to PrimeFaces!!!";
-        list = new ArrayList<>(Arrays.asList(
-                new TestObject("Thriller", "Michael Jackson", 1982),
-                new TestObject("Back in Black", "AC/DC", 1980),
-                new TestObject("The Bodyguard", "Whitney Houston", 1992),
-                new TestObject("The Dark Side of the Moon", "Pink Floyd", 1973)
-        ));
+
+        uploadedFiles = new ArrayList<>();
     }
 
+    public boolean isFilePresent() {
+
+        return !uploadedFiles.isEmpty();
+    }
+
+    public void fileUploadEvent(final FileUploadEvent event) {
+
+        System.out.println("Upload!");
+
+        final String error = validate(event.getFile());
+
+        if (error != null) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                error, ""));
+        } else {
+            final UploadedFile uploadedFile = new UploadedFile(event.getFile().getContent(), event.getFile()
+                .getFileName(), event.getFile().getSize());
+            uploadedFiles.add(uploadedFile);
+        }
+    }
+
+    protected String validate(final org.primefaces.model.file.UploadedFile info) {
+
+        if (!info.getContentType().startsWith("text/xml")) {
+            return "Invalid content type: " + info.getContentType();
+        } else {
+            return null;
+        }
+    }
+
+    public void fileUploadAction() {
+
+        System.out.println("Action!");
+    }
+
+    public void cancelFileUploadDialog() {
+
+        System.out.println("Cancel!");
+    }
 }

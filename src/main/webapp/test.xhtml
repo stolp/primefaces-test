@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="jakarta.faces.facelets"
-      xmlns:f="jakarta.faces.core"
-      xmlns:h="jakarta.faces.html"
-      xmlns:p="primefaces">
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:f="http://xmlns.jcp.org/jsf/core"
+  xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+  xmlns:p="http://primefaces.org/ui">
 
     <h:head>
         <title>PrimeFaces Test</title>
@@ -12,10 +14,41 @@
     </h:head>
     <h:body>
 
-        <h1>#{testView.string}</h1>
-        <h:form id="frmTest">
+      <h1>FileUpload</h1>
+      <h:form id="frmTest">
 
-        </h:form>
+        <p:dialog
+          resizable="false" fitViewport="false"
+          closable="false" responsive="true"
+          visible="true"
+          header="Test Upload">
+          
+          <p:fileUpload auto="true"
+            skinSimple="false" dragDropSupport="true" mode="advanced" multiple="true"
+            update="@form" global="true"
+            label="Select" uploadLabel="Upload" cancelLabel="Cancel"
+            sizeLimit="1000000"
+            listener="#{testView.fileUploadEvent}">
+      
+            <p:messages showDetail="true">
+              <p:autoUpdate />
+            </p:messages>
+          </p:fileUpload>
+      
+            <p:commandButton
+              value="Ok"
+              process="@this" update="@form"
+              action="#{testView.fileUploadAction}"
+              disabled="#{not testView.filePresent}">
+            </p:commandButton>
+      
+            <p:commandButton
+              value="Cancel" process="@this" update="@form"
+              action="#{testView.cancelFileUploadDialog}" />
+      
+        </p:dialog>
+
+      </h:form>
 
     </h:body>
 </html>
